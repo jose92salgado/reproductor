@@ -1,6 +1,6 @@
 // Service worker: guarda la app para que abra sin conexión.
 // Cambia la versión cada vez que publiques cambios para que el iPhone los descargue.
-const CACHE = 'reproductor-v3';
+const CACHE = 'reproductor-v4';
 const SHELL = [
   './',
   './index.html',

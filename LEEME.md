@@ -8,6 +8,11 @@ con su icono y a pantalla completa.
 - **Audius**: música gratis de artistas independientes, **sin anuncios** y sin clave. Sigue sonando con
   la pantalla bloqueada y se controla desde el Centro de control. Al abrirla muestra las canciones en
   tendencia, y puedes buscar por artista o canción. Necesita internet.
+- **Inicio**: canciones recomendadas según lo que escuchas, lo más escuchado y lo reciente.
+- **Mis listas**: "Me gusta" y tus propias listas, mezclando canciones de Mi música y de Audius
+  (toca ⋯ en cualquier canción).
+- **Transición entre canciones** (crossfade, 0 a 12 s) y **Modo DJ**: al terminar la cola sigue con
+  canciones parecidas de Audius. Están en los botones bajo el reproductor.
 - **YouTube**: busca canciones y las reproduce con el reproductor oficial de YouTube. Puede mostrar
   anuncios, salvo que tengas YouTube Premium y hayas iniciado sesión en youtube.com desde Safari.
 
