@@ -312,7 +312,7 @@ details.help ol{margin:10px 0 0; padding-left:20px; color:var(--muted); display:
     <div id="pane-yt" class="library" hidden>
       <div class="card" id="keyCard" hidden>
         <h4>Conecta YouTube</h4>
-        <p>Para buscar necesitas una clave gratuita de la YouTube Data API v3. Los pasos están en el archivo LEEME.md. La clave se guarda solo en este iPhone.</p>
+        <p>La app ya trae una clave. Solo pega una aquí si quieres usar una clave tuya distinta; déjalo vacío y toca Guardar para volver a la de la app.</p>
         <form class="searchform" id="keyForm">
           <input class="search" id="keyInput" type="text" placeholder="Pega aquí tu clave (AIza…)" autocomplete="off" autocapitalize="off" spellcheck="false">
           <button class="btn" type="submit">Guardar</button>
@@ -1013,7 +1013,7 @@ details.help ol{margin:10px 0 0; padding-left:20px; color:var(--muted); display:
     tab = t; prefs.set('tab', t);
     document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
     ['home', 'local', 'au', 'lists', 'yt'].forEach(p => { $('pane-' + p).hidden = p !== t; });
-    if (t === 'yt') { showKeyCard(!prefs.get('ytkey', '')); loadYTApi(); }
+    if (t === 'yt') { showKeyCard(!ytKey()); loadYTApi(); }
     if (t === 'au' && !auPage) { auHome(); return; }
     render();
   }
@@ -1243,6 +1243,10 @@ details.help ol{margin:10px 0 0; padding-left:20px; color:var(--muted); display:
   }
 
   /* ---------- YouTube (reproductor oficial; no suena en segundo plano) ---------- */
+  // Clave de la app: solo funciona para YouTube Data API v3 y solo desde jose92salgado.github.io (restringida en Google Cloud).
+  // Si guardas una clave propia en la app, se usa esa en su lugar.
+  const YT_APP_KEY = 'AIzaSyATpZn3u01p8NAfzWebKPdXobng4pKwtws';
+  const ytKey = () => prefs.get('ytkey', '') || YT_APP_KEY;
   let ytResults = [], ytIndex = -1;
   let ytApi = null, ytPlayer = null, ytPlayerReady = false, ytState = -1, ytPendingId = null, ytTimer = null;
   function loadYTApi() {
@@ -1300,7 +1304,7 @@ details.help ol{margin:10px 0 0; padding-left:20px; color:var(--muted); display:
     render();
   }
   async function ytSearch(q) {
-    const key = prefs.get('ytkey', '');
+    const key = ytKey();
     if (!key) { showKeyCard(true); return; }
     const ul = $('ytList'); ul.innerHTML = ''; ul.appendChild(el('li', 'empty', 'Buscando…'));
     const url = 'https://www.googleapis.com/youtube/v3/search?' + new URLSearchParams({ part: 'snippet', type: 'video', videoEmbeddable: 'true', maxResults: '25', q, key });
@@ -1325,6 +1329,7 @@ details.help ol{margin:10px 0 0; padding-left:20px; color:var(--muted); display:
   $('keyForm').addEventListener('submit', e => {
     e.preventDefault();
     const k = $('keyInput').value.trim();
+    if (!k && YT_APP_KEY) { try { localStorage.removeItem('rep:ytkey'); } catch {} showKeyCard(false); toast('Se usará la clave de la app.'); return; }
     if (!/^[A-Za-z0-9_\-]{30,}$/.test(k)) { toast('Esa clave no parece válida. Debe empezar por “AIza”.'); return; }
     prefs.set('ytkey', k); showKeyCard(false); toast('Clave guardada. Ya puedes buscar.'); $('ytQuery').focus();
   });
